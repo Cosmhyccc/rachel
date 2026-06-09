@@ -6,375 +6,358 @@
 <title>rachel, will you go on a date with me?</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet" />
 <style>
   /* ============================================================
-     rachelweshouldgoout — a low-poly rose that loses a petal
-     for every day she doesn't reply. dead at 30. made by saif.
+     rachelweshouldgoout — a diary page. a low-poly rose sheds a
+     petal for every day she doesn't reply. dead at 30 days.
+     made by saif.
      ============================================================ */
 
   :root{
-    --bg0:#0a0406;
-    --bg1:#1a0810;
-    --bg2:#2a0a16;
-    --crimson:#c81d3a;
+    --paper:#1b2030;          /* dark slate diary page */
+    --paper-shade:#11141f;
+    --dot:rgba(255,255,255,.07);
+    --margin:#c8566a;
+    --ink:#f4f1ea;            /* white ink */
+    --ink-soft:#c2c6d2;
+    --ink-faint:#8b90a2;
+    --crimson:#ff4d68;
     --crimson-lo:#7a0f22;
-    --crimson-hi:#ff5a6e;
-    --ink:#e8c9cf;
-    --ink-dim:#7d5560;
-    --gold:#d8a657;
+    --crimson-hi:#ff7d90;
+    --gold:#e7c66b;
   }
 
   *{ box-sizing:border-box; }
 
   html,body{
-    margin:0; padding:0;
+    margin:0; padding:0; min-height:100vh;
     background:
-      radial-gradient(ellipse at 50% 30%, var(--bg2) 0%, var(--bg1) 45%, var(--bg0) 100%);
+      radial-gradient(ellipse at 50% 20%, #2a2228 0%, #181216 55%, #0d0a0c 100%);
+    font-family:'Caveat', cursive;
     color:var(--ink);
-    font-family:'VT323', monospace;
-    min-height:100vh;
     overflow-x:hidden;
+    display:flex; justify-content:center;
+    padding:34px 16px 60px;
   }
 
-  /* CRT scanlines + flicker overlay */
-  body::before{
-    content:"";
-    position:fixed; inset:0; z-index:9999; pointer-events:none;
-    background:repeating-linear-gradient(
-      to bottom,
-      rgba(0,0,0,0) 0px,
-      rgba(0,0,0,0) 2px,
-      rgba(0,0,0,0.18) 3px,
-      rgba(0,0,0,0) 4px
-    );
-    mix-blend-mode:multiply;
-  }
-  body::after{
-    content:"";
-    position:fixed; inset:0; z-index:9998; pointer-events:none;
-    background:radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.55) 100%);
-  }
-
-  .wrap{
-    max-width:760px; margin:0 auto; padding:26px 16px 60px;
-    text-align:center; position:relative; z-index:1;
-  }
-
-  .topbar{
-    font-family:'VT323',monospace;
-    font-size:15px; color:var(--ink-dim);
-    letter-spacing:1px; margin-bottom:8px;
-    display:flex; justify-content:space-between; opacity:.8;
-  }
-
-  h1{
-    font-family:'Press Start 2P', monospace;
-    font-size:17px; line-height:1.7;
-    color:var(--ink);
-    margin:14px 0 4px;
-    text-shadow:0 0 8px rgba(255,90,110,.35), 2px 2px 0 #000;
-  }
-  .sub{
-    font-size:21px; color:var(--ink-dim);
-    margin:0 0 10px; letter-spacing:.5px;
-  }
-
-  /* the big status line */
-  .status{
-    font-family:'Press Start 2P', monospace;
-    font-size:13px; margin:10px 0 2px; letter-spacing:1px;
-  }
-  .status .ans{
-    color:var(--crimson-hi);
-    text-shadow:0 0 10px rgba(255,90,110,.6);
-  }
-  .status.replied .ans{ color:var(--gold); text-shadow:0 0 12px rgba(216,166,87,.7); }
-
-  /* ---- the stage / rose ---- */
-  .stage{
+  /* ---------- the paper sheet ---------- */
+  .paper{
     position:relative;
-    width:400px; height:600px;
-    margin:6px auto 0;
-    max-width:96vw;
+    width:100%; max-width:860px;
+    background:linear-gradient(180deg, var(--paper), var(--paper-shade));
+    background-image:
+      linear-gradient(180deg, rgba(0,0,0,0) , rgba(0,0,0,.02)),
+      radial-gradient(var(--dot) 1.3px, transparent 1.4px);
+    background-size:auto, 22px 22px;
+    border-radius:3px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.12) inset,
+      0 24px 50px rgba(0,0,0,.6),
+      0 4px 14px rgba(0,0,0,.45);
+    transform:rotate(-.5deg);
+    padding:42px 40px 54px 78px;     /* extra left pad for margin line */
   }
-  /* scale stage down on small screens */
-  @media (max-width:430px){
-    .stage{ transform:scale(.82); transform-origin:top center; height:500px; }
+  /* red diary margin line */
+  .paper::before{
+    content:""; position:absolute; top:0; bottom:0; left:58px; width:2px;
+    background:var(--margin); opacity:.6;
   }
+  /* subtle aged corners */
+  .paper::after{
+    content:""; position:absolute; inset:0; pointer-events:none; border-radius:3px;
+    box-shadow:inset 0 0 70px rgba(0,0,0,.45);
+  }
+
+  /* washi tape on top */
+  .tape{
+    position:absolute; top:-14px; left:50%; transform:translateX(-50%) rotate(-1.5deg);
+    width:120px; height:30px;
+    background:repeating-linear-gradient(45deg, rgba(216,139,148,.45) 0 8px, rgba(216,139,148,.28) 8px 16px);
+    border-left:1px dashed rgba(255,255,255,.4); border-right:1px dashed rgba(255,255,255,.4);
+    box-shadow:0 2px 4px rgba(0,0,0,.15);
+  }
+
+  .diary-date{
+    font-family:'Special Elite', monospace;
+    font-size:14px; color:var(--ink-faint); letter-spacing:.5px;
+    text-align:right; margin:0 0 6px;
+  }
+
+  .ask{
+    font-size:40px; font-weight:700; line-height:1.05;
+    color:var(--ink); margin:0 0 2px;
+  }
+  .ask .small{ display:block; font-size:23px; font-weight:500; color:var(--ink-soft); }
+  .status-line{
+    font-family:'Special Elite', monospace;
+    font-size:13px; letter-spacing:1px; color:var(--ink-soft);
+    margin:6px 0 18px;
+  }
+  .status-line b{ color:var(--crimson); }
+  .status-line.replied b{ color:var(--gold); }
+
+  /* ---------- two-column body ---------- */
+  .cols{ display:flex; gap:30px; align-items:flex-start; }
+  .left-col{ flex:0 0 248px; }
+  .right-col{ flex:1 1 auto; min-width:0; }
+
+  @media (max-width:680px){
+    .cols{ flex-direction:column; gap:18px; }
+    .left-col{ flex:none; width:100%; display:flex; gap:16px; align-items:flex-start; }
+    .rose-stage{ flex:0 0 168px; }
+    .meters{ flex:1; }
+    .paper{ padding:34px 22px 44px 54px; }
+    .paper::before{ left:36px; }
+  }
+
+  /* ---- rose stage ---- */
+  .rose-stage{
+    position:relative; width:240px; height:430px; margin:0 auto;
+  }
+  @media (max-width:680px){ .rose-stage{ width:168px; height:300px; transform:scale(1);} }
 
   .stem-svg{ position:absolute; inset:0; width:100%; height:100%; z-index:1;
-    filter:drop-shadow(0 6px 10px rgba(0,0,0,.5)); }
+    filter:drop-shadow(0 4px 5px rgba(80,40,30,.25)); }
 
   .petal{
     position:absolute;
-    width:54px; height:74px;
     clip-path:polygon(50% 0%, 78% 16%, 96% 52%, 50% 100%, 4% 52%, 22% 16%);
     background:linear-gradient(135deg, var(--crimson-hi) 0%, var(--crimson) 44%, var(--crimson-lo) 100%);
-    z-index:5;
-    transform-origin:50% 100%;
-    transition:transform 1.1s cubic-bezier(.5,.05,.4,1), opacity 1.1s ease;
+    z-index:5; transform-origin:50% 100%;
+    transition:transform 1.2s cubic-bezier(.5,.05,.4,1), opacity 1.2s ease;
     will-change:transform;
+    box-shadow:0 1px 2px rgba(90,20,30,.3);
   }
-  /* faceted highlight — the low-poly second face */
-  .petal::after{
-    content:"";
-    position:absolute; inset:0;
+  .petal::after{ content:""; position:absolute; inset:0;
     clip-path:polygon(50% 0%, 78% 16%, 50% 54%, 22% 16%);
-    background:linear-gradient(160deg, rgba(255,255,255,.30), rgba(255,255,255,0) 70%);
-  }
-  /* a darker facet on the lower face */
-  .petal::before{
-    content:"";
-    position:absolute; inset:0;
+    background:linear-gradient(160deg, rgba(255,255,255,.30), rgba(255,255,255,0) 70%); }
+  .petal::before{ content:""; position:absolute; inset:0;
     clip-path:polygon(50% 54%, 96% 52%, 50% 100%, 4% 52%);
-    background:linear-gradient(0deg, rgba(0,0,0,.35), rgba(0,0,0,0) 80%);
-  }
+    background:linear-gradient(0deg, rgba(0,0,0,.32), rgba(0,0,0,0) 80%); }
 
-  .petal.fallen{ opacity:.92; }
   .petal .lbl{
-    position:absolute; left:50%; top:108%;
-    transform:translateX(-50%);
-    font-family:'Press Start 2P',monospace;
-    font-size:7px; color:var(--ink-dim);
-    white-space:nowrap; opacity:0;
+    position:absolute; left:50%; top:104%; transform:translateX(-50%);
+    font-family:'Special Elite', monospace; font-size:8px;
+    color:var(--ink-faint); white-space:nowrap; opacity:0;
     transition:opacity .6s ease .4s;
   }
-  .petal.fallen .lbl{ opacity:.85; }
+  .petal.fallen .lbl{ opacity:.8; }
+  .rose-stage.dead .petal{ filter:grayscale(.65) brightness(.7); }
 
-  /* ground line */
-  .ground{
-    position:absolute; left:0; right:0; bottom:38px; height:2px;
-    background:linear-gradient(90deg, transparent, rgba(125,85,96,.5) 20%, rgba(125,85,96,.5) 80%, transparent);
-    z-index:2;
+  /* ---- meters: days + timer ---- */
+  .meters{ margin-top:30px; }
+  .meter-label{
+    font-family:'Special Elite', monospace; font-size:11px; letter-spacing:1.5px;
+    text-transform:uppercase; color:var(--ink-faint); margin-bottom:1px;
+  }
+  .days-num{
+    font-family:'Special Elite', monospace;
+    font-size:46px; line-height:1; color:var(--crimson);
+    margin:0 0 2px;
+  }
+  .petal-remain{ font-size:21px; color:var(--ink-soft); margin:0 0 16px; }
+  .timer{
+    font-family:'Special Elite', monospace; font-size:24px; color:var(--ink);
+    letter-spacing:1px;
+  }
+  .reply-note{
+    display:none; margin-top:14px; font-size:24px; color:var(--gold);
+    line-height:1.2;
   }
 
-  /* ---- counters ---- */
-  .panel{
-    margin:14px auto 0; max-width:520px;
-    border:2px solid rgba(125,85,96,.45);
-    background:linear-gradient(180deg, rgba(42,10,22,.6), rgba(10,4,6,.6));
-    padding:14px 18px;
-    box-shadow:inset 0 0 18px rgba(0,0,0,.6);
+  /* ---- the letter ---- */
+  .letter{
+    font-size:23px; line-height:1.42; color:var(--ink);
+    /* faint ruled lines under the handwriting */
+    background-image:repeating-linear-gradient(
+      to bottom, transparent 0 32px, rgba(255,255,255,.07) 32px 33px);
+    background-position:0 6px;
   }
-  .daybig{
-    font-family:'Press Start 2P',monospace;
-    font-size:22px; color:var(--crimson-hi);
-    text-shadow:0 0 10px rgba(255,90,110,.5);
-    margin:2px 0 6px;
-  }
-  .daylabel{ font-size:20px; color:var(--ink-dim); letter-spacing:1px; }
-  .countdown{
-    font-family:'Press Start 2P',monospace;
-    font-size:14px; color:var(--gold); margin-top:10px;
-    text-shadow:0 0 8px rgba(216,166,87,.4);
-  }
-  .cd-cap{ font-size:17px; color:var(--ink-dim); display:block; margin-bottom:4px; letter-spacing:1px;}
-
-  .msg{ font-size:21px; color:var(--ink); margin:16px auto 0; max-width:480px; line-height:1.35; }
-  .msg.replied{ color:var(--gold); }
-
-  hr.web{ border:none; border-top:1px dashed rgba(125,85,96,.4); margin:26px auto; max-width:520px; }
+  .letter h2{ font-size:30px; font-weight:700; margin:0 0 8px; }
+  .letter p{ margin:0 0 14px; }
+  .letter .sign{ font-size:30px; font-weight:700; color:var(--ink); margin-top:6px; }
+  .letter .ps{ font-size:20px; color:var(--ink-soft); }
 
   .foot{
-    font-size:16px; color:var(--ink-dim); line-height:1.6; opacity:.75;
-    letter-spacing:.5px;
+    margin-top:30px; text-align:center;
+    font-family:'Special Elite', monospace; font-size:11px;
+    color:var(--ink-faint); letter-spacing:1px; opacity:.8;
   }
-  .foot .blink{ animation:blink 1.1s steps(2,start) infinite; }
-  @keyframes blink{ to{ visibility:hidden; } }
-
-  .counter-badge{
-    display:inline-block; margin-top:8px;
-    background:#000; border:1px solid #444; padding:2px 8px;
-    font-family:'VT323',monospace; font-size:16px; color:#36ff6b;
-    letter-spacing:3px;
-  }
-
-  /* dead state desaturation */
-  .stage.dead .petal{ filter:grayscale(.7) brightness(.6); }
 </style>
 </head>
 <body>
-  <div class="wrap">
+  <div class="paper">
+    <div class="tape"></div>
 
-    <div class="topbar">
-      <span>~/rachel</span>
-      
-    </div>
+    <div class="diary-date" id="diaryDate">san francisco · 2026</div>
 
-    <h1>RACHEL,<br/>WILL YOU GO ON A DATE WITH ME?</h1>
-    <p class="sub">— a rose, for the girl from casanova —</p>
+    <h1 class="ask">
+      Rachel, will you go on a date with me?
+      <span class="small">— for the prettiest girl from Casanova —</span>
+    </h1>
+    <div class="status-line" id="statusLine">HAS SHE REPLIED THO? &nbsp; <b id="statusAns">…</b></div>
 
-    <div class="status" id="status">
-      HAS RACHEL REPLIED? &nbsp;<span class="ans" id="statusAns">...</span>
-    </div>
+    <div class="cols">
+      <!-- LEFT: rose + meters -->
+      <div class="left-col">
+        <div class="rose-stage" id="stage">
+          <svg class="stem-svg" viewBox="0 0 240 430" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <!-- stem -->
+            <polygon points="116,120 124,120 130,420 110,420" fill="#5a7d3f"/>
+            <polygon points="124,120 130,420 126,420 120,250" fill="#46662f"/>
+            <polygon points="116,120 120,250 114,420 110,420" fill="#6b8f4a"/>
+            <!-- sepals -->
+            <polygon points="92,142 120,124 148,142 120,180" fill="#6b8f4a"/>
+            <polygon points="120,124 148,142 120,180" fill="#5a7d3f"/>
+            <!-- left leaf -->
+            <polygon points="116,272 52,248 34,284 80,300" fill="#6b8f4a"/>
+            <polygon points="116,272 80,300 64,272 52,248" fill="#46662f"/>
+            <!-- right leaf -->
+            <polygon points="126,322 192,300 210,338 156,350" fill="#6b8f4a"/>
+            <polygon points="126,322 156,350 174,322 192,300" fill="#46662f"/>
+          </svg>
+          <!-- petals injected by JS -->
+        </div>
 
-    <div class="stage" id="stage">
-      <!-- low-poly stem, sepals, leaves -->
-      <svg class="stem-svg" viewBox="0 0 400 600" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-        <!-- stem -->
-        <polygon points="196,180 204,180 210,560 190,560" fill="#2f5d2a"/>
-        <polygon points="204,180 210,560 206,560 200,300" fill="#23491f"/>
-        <polygon points="196,180 200,300 194,560 190,560" fill="#3a7233"/>
-        <!-- sepals at bloom base -->
-        <polygon points="170,205 200,185 230,205 200,245" fill="#3a7233"/>
-        <polygon points="200,185 230,205 200,245" fill="#2f5d2a"/>
-        <!-- left leaf -->
-        <polygon points="196,360 120,330 96,372 150,392" fill="#3a7233"/>
-        <polygon points="196,360 150,392 130,360 120,330" fill="#2f5d2a"/>
-        <polygon points="120,330 96,372 110,348" fill="#23491f"/>
-        <!-- right leaf -->
-        <polygon points="206,420 286,392 306,438 250,452" fill="#3a7233"/>
-        <polygon points="206,420 250,452 270,420 286,392" fill="#2f5d2a"/>
-        <polygon points="286,392 306,438 292,410" fill="#23491f"/>
-      </svg>
-      <div class="ground"></div>
-      <!-- petals injected by JS -->
-    </div>
+        <div class="meters">
+          <div class="meter-label">days of silence</div>
+          <div class="days-num" id="dayBig">0</div>
+          <div class="petal-remain" id="petalLine">30 petals remain</div>
 
-    <div class="panel" id="panel">
-      <div class="daylabel">days of silence</div>
-      <div class="daybig" id="dayBig">0</div>
-      <div class="daylabel" id="petalLine">30 petals remain</div>
-      <div class="countdown" id="cd">
-        <span class="cd-cap">next petal falls in</span>
-        <span id="cdClock">--:--:--</span>
+          <div id="timerBlock">
+            <div class="meter-label">next petal falls in</div>
+            <div class="timer" id="cdClock">--:--:--</div>
+          </div>
+          <div class="reply-note" id="replyNote"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT: the letter (EDIT THIS — write whatever you want to say) -->
+      <div class="right-col">
+        <div class="letter" id="letter">
+           
+          <h2>Dear Rachel,</h2>
+          <p>We talked for an hour at Casanova and I haven't stopped thinking about you. I don't usually do things like this. It's super embarrasing and I never EVER double text... But that conversation was the best one I've had in a long, long time so fuck it i'll be a little cringe for once.</p>
+          <p>So here it is, no games: I think you're brilliant and beautiful and interesting and brilliant and smart and brilliant and I'd really like to take you out. One coffee or walk just lmk.</p>
+          <p>I built this virtual flower that loses a petal for each day I don't hear from you. Eventually it'll die and the website will off itself. Boooo. But wait, You can save it! The second you reply, it comes back to life.</p>
+          <p class="sign">— me</p>
+          <p class="ps">p.s. did i mention brilliant?</p>
+          <!-- ✍️ end letter ✍️ -->
+        </div>
       </div>
     </div>
 
-    <p class="msg" id="msg"></p>
-
-    <hr class="web" />
-    <p class="foot">
-      code was hand written by me (no ai slop vibecode) ·&nbsp; timer started 1:12pm June 7th 2026<br/>
-      eventually this rose will die, and i promise to never bother u again. <br/>
-      <span class="counter-badge" id="visits">00000001</span>
-    </p>
+    <div class="foot"> coded this thing by hand | no AI slop vibecode </div>
   </div>
 
 <script>
 /* ============================================================
    CONFIG — Saif's controls.
-   - metDate: the day the silence started (the count begins here).
-   - sheReplied: FLIP THIS TO true and redeploy when she texts back.
-        Only you can push to the repo, so only you can stop the rose.
-   - You can also preview the "she replied" ending privately by
-        opening the page with  #shereplied  on the end of the URL.
+   - metDate:     day 1 of silence (the count starts here).
+   - sheReplied:  FLIP TO true and redeploy when she texts back.
+                  Only you can push the repo, so only you can stop the rose.
+   - Private preview of the happy ending: add  #shereplied  to the URL.
    ============================================================ */
   const CONFIG = {
-    metDate: "2026-06-07T00:00:00",   // <-- day 1 of silence
+    metDate: "2026-06-07T00:00:00",
     totalPetals: 30,
-    sheReplied: false                 // <-- change to true when she replies
+    sheReplied: false
   };
 
-  // secret private override (doesn't affect what she sees)
   const forceReplied = location.hash.toLowerCase() === "#shereplied";
   const replied = CONFIG.sheReplied || forceReplied;
 
-  const DAY_MS = 24 * 60 * 60 * 1000;
-  const start = new Date(CONFIG.metDate).getTime();
+  const DAY_MS = 24*60*60*1000;
+  const start  = new Date(CONFIG.metDate).getTime();
 
   const stage     = document.getElementById("stage");
   const dayBig    = document.getElementById("dayBig");
   const petalLine = document.getElementById("petalLine");
-  const cd        = document.getElementById("cd");
   const cdClock   = document.getElementById("cdClock");
-  const msg       = document.getElementById("msg");
+  const timerBlock= document.getElementById("timerBlock");
   const statusAns = document.getElementById("statusAns");
-  const statusEl  = document.getElementById("status");
+  const statusLine= document.getElementById("statusLine");
+  const replyNote = document.getElementById("replyNote");
 
-  // ---- build petal layout: 4 rings, outer falls first ----
-  // rings: [count, radius, size]
-  const rings = [
-    [12, 122, 54],
-    [9,   82, 48],
-    [6,   46, 40],
-    [3,   18, 32]
-  ];
-  const cx = 200, cy = 170; // bloom center in the 400x600 stage coords
-  const sx = 400, sy = 600;
+  // stage coordinate system (matches CSS px / svg viewBox)
+  const SX = 240, SY = 430;
+  const cx = 120, cy = 110;
 
-  // produce an ordered list (outer-most first) of petal positions
+  // rings: [count, radius, petalWidthPx] — outer ring first (falls first)
+  const rings = [ [12,70,30], [9,48,26], [6,28,22], [3,11,18] ];
   const layout = [];
   rings.forEach((ring, ri) => {
     const [count, r, size] = ring;
-    for (let i = 0; i < count; i++){
-      const ang = (i / count) * Math.PI * 2 + (ri * 0.5);
-      layout.push({
-        x: cx + Math.cos(ang) * r,
-        y: cy + Math.sin(ang) * r,
-        rot: (ang * 180 / Math.PI) + 90,
-        size
-      });
+    for (let i=0;i<count;i++){
+      const ang = (i/count)*Math.PI*2 + ri*0.5;
+      layout.push({ x:cx+Math.cos(ang)*r, y:cy+Math.sin(ang)*r,
+                    rot:(ang*180/Math.PI)+90, size });
     }
   });
-  // layout[0..11] outer ... layout[27..29] center. fall outer-first => index order is already outer-first.
 
-  // deterministic pseudo-random for fallen-petal scatter
-  function rnd(n){ const x = Math.sin(n * 99.13) * 43758.5; return x - Math.floor(x); }
+  function rnd(n){ const x=Math.sin(n*99.13)*43758.5; return x-Math.floor(x); }
 
   const petals = [];
   layout.forEach((p, idx) => {
     const el = document.createElement("div");
     el.className = "petal";
-    const w = p.size, h = p.size * 1.36;
-    el.style.width = (w / sx * 100) + "%";
-    el.style.height = (h / sy * 100) + "%";
-    el.style.left = ((p.x - w/2) / sx * 100) + "%";
-    el.style.top  = ((p.y - h/2) / sy * 100) + "%";
+    const w = p.size, h = p.size*1.36;
+    el.style.width  = (w/SX*100)+"%";
+    el.style.height = (h/SY*100)+"%";
+    el.style.left   = ((p.x-w/2)/SX*100)+"%";
+    el.style.top    = ((p.y-h/2)/SY*100)+"%";
     el.style.transform = `rotate(${p.rot}deg)`;
-    el.dataset.baseRot = p.rot;
-    el.style.zIndex = 5 + idx;
+    el.style.zIndex = 5+idx;
     const lbl = document.createElement("span");
-    lbl.className = "lbl";
-    el.appendChild(lbl);
+    lbl.className = "lbl"; el.appendChild(lbl);
     stage.appendChild(el);
-    petals.push({el, lbl, base:p});
+    petals.push({el,lbl,base:p});
   });
 
   function fmt(ms){
-    if (ms < 0) ms = 0;
-    const h = Math.floor(ms / 3600000);
-    const m = Math.floor((ms % 3600000) / 60000);
-    const s = Math.floor((ms % 60000) / 1000);
-    const z = n => String(n).padStart(2,"0");
+    if(ms<0) ms=0;
+    const h=Math.floor(ms/3600000), m=Math.floor(ms%3600000/60000), s=Math.floor(ms%60000/1000);
+    const z=n=>String(n).padStart(2,"0");
     return `${z(h)}:${z(m)}:${z(s)}`;
   }
-
-  function daysElapsed(){
-    return Math.max(0, Math.floor((Date.now() - start) / DAY_MS));
-  }
+  function daysElapsed(){ return Math.max(0, Math.floor((Date.now()-start)/DAY_MS)); }
 
   function dropPetal(i){
-    const {el, lbl, base} = petals[i];
+    const {el,lbl,base} = petals[i];
     el.classList.add("fallen");
-    // scatter along the ground
-    const groundY = 548;
-    const tx = (rnd(i) * 300) + 50 - base.x;          // land x across stage
-    const ty = groundY - base.y;                       // fall to ground
-    const spin = (rnd(i+7) * 720 - 360);
-    el.style.transform =
-      `translate(${tx/sx*100*4}%, ${ty/sy*100*6}%) rotate(${spin}deg)`;
-    el.style.zIndex = 2; // behind standing petals
-    lbl.textContent = "DAY " + (i + 1);
+    const groundY = 372 - (i % 3) * 10;            // pile near base, clear of the labels
+    const landX = 34 + ((i*47 + 13) % (SX - 78));  // deterministic spread across width
+    const tx = landX - base.x;
+    const ty = groundY - base.y;
+    const spin = rnd(i+7)*720-360;
+    el.style.transform = `translate(${tx/base.size*100}%, ${ty/(base.size*1.36)*100}%) rotate(${spin}deg)`;
+    el.style.zIndex = 2;
+    lbl.textContent = "day "+(i+1);
   }
 
+  // diary date = TODAY (updates each day the page is opened)
+  function setDiaryDate(){
+    const opt = {weekday:'long', month:'long', day:'numeric', year:'numeric'};
+    document.getElementById("diaryDate").textContent =
+      "san francisco · " + new Date().toLocaleDateString('en-US', opt).toLowerCase();
+  }
+  setDiaryDate();
+
   function render(){
-    if (replied){
+    if(replied){
       statusAns.textContent = "YES ♥";
-      statusEl.classList.add("replied");
+      statusLine.classList.add("replied");
       dayBig.textContent = "♥";
       petalLine.textContent = "the rose lives";
-      cd.style.display = "none";
-      msg.className = "msg replied";
-      msg.textContent = "she said yes. every petal grew back. see you at dolores. 🌹";
+      timerBlock.style.display = "none";
+      replyNote.style.display = "block";
+      replyNote.textContent = "she replied. every petal grew back. see you at dolores. 🌹";
       stage.classList.remove("dead");
-      // ensure all petals on bloom, vibrant
-      petals.forEach(({el,lbl,base}) => {
+      petals.forEach(({el,lbl,base})=>{
         el.classList.remove("fallen");
         el.style.transform = `rotate(${base.rot}deg)`;
-        el.style.zIndex = 5;
-        lbl.textContent = "";
+        el.style.zIndex = 5; lbl.textContent="";
       });
       return;
     }
@@ -385,41 +368,25 @@
 
     statusAns.textContent = "NO.";
     dayBig.textContent = d;
-    petalLine.textContent = remain > 0
-      ? remain + (remain === 1 ? " petal remains" : " petals remain")
+    petalLine.textContent = remain>0
+      ? remain + (remain===1?" petal remains":" petals remain")
       : "no petals left";
 
-    // drop the fallen ones (outer-first = index 0..fallen-1)
-    petals.forEach((p, i) => {
-      if (i < fallen && !p.el.classList.contains("fallen")){
-        dropPetal(i);
-      }
+    petals.forEach((p,i)=>{
+      if(i<fallen && !p.el.classList.contains("fallen")) dropPetal(i);
     });
 
-    if (remain <= 0){
+    if(remain<=0){
       stage.classList.add("dead");
-      cd.style.display = "none";
-      msg.textContent = "thirty days. the rose is bare. i sent my one last text — and i meant the promise i made to myself. no more. take care, rachel.";
-    } else {
-      // countdown to next petal
-      const nextAt = start + (d + 1) * DAY_MS;
-      cdClock.textContent = fmt(nextAt - Date.now());
-      msg.textContent = remain > 20
-        ? "i kinda like you. you're very pretty and interesting and i've never done this before. let's hang out?❤️"
-        : remain > 8
-          ? "still here. still hoping you'll text. the rose is thinning but it isn't gone."
-          : "almost out of petals. if you've been meaning to reply.. now's a lovely time.";
+      timerBlock.style.display="none";
+    }else{
+      const nextAt = start + (d+1)*DAY_MS;
+      cdClock.textContent = fmt(nextAt-Date.now());
     }
   }
 
   render();
   setInterval(render, 1000);
-
-  // playful fake visitor counter that nudges up slightly per load
-  (function(){
-    const base = 1 + Math.floor((Date.now() - start) / DAY_MS) * 3;
-    document.getElementById("visits").textContent = String(Math.max(1, base)).padStart(8,"0");
-  })();
 </script>
 </body>
 </html>
