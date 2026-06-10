@@ -251,6 +251,10 @@
     <div class="foot"> coded this thing by hand | no AI slop vibecode | let's go  </div>
   </div>
 
+  <!-- Vercel Web Analytics: enable it in your Vercel dashboard
+       (Project → Analytics → Enable). This line makes it work. -->
+  <script defer src="/_vercel/insights/script.js"></script>
+
 <script>
 /* ============================================================
    CONFIG — comments to myself about the controls.
@@ -267,6 +271,39 @@
 
   const forceReplied = location.hash.toLowerCase() === "#shereplied";
   const replied = CONFIG.sheReplied || forceReplied;
+
+  /* ============================================================
+     VISIT PING — know when she actually opens it.
+     Paste a Discord webhook URL (Server Settings → Integrations →
+     Webhooks → New Webhook → Copy URL) OR your own endpoint below.
+     Leave "" to disable. Telegram: use your bot's sendMessage URL.
+     - Skips link-preview bots (iMessage/WhatsApp/IG, etc.)
+     - Only fires after the page is actually visible for 5 seconds
+     - Won't ping YOUR device: open once with  #iamsaif  to mark it
+     - Add ?ref=whatever to a link to label where it was opened
+     ============================================================ */
+  const PING_URL = "";   // <-- paste your Discord/Telegram webhook here
+  (function visitPing(){
+    try{
+      if(location.hash.toLowerCase() === "#iamsaif"){ localStorage.setItem("saif_owner","1"); }
+      if(localStorage.getItem("saif_owner") === "1") return;   // it's you, skip
+      if(!PING_URL) return;
+      const ua = navigator.userAgent || "";
+      if(/bot|crawl|spider|facebookexternalhit|whatsapp|telegrambot|slackbot|discordbot|twitterbot|linkedinbot|embedly|preview|skypeuripreview|line\//i.test(ua)) return;
+      let fired = false;
+      function fire(){
+        if(fired) return; fired = true;
+        const ref = new URLSearchParams(location.search).get("ref") || "direct";
+        const when = new Date().toLocaleString();
+        const payload = { content: "🌹 rachelweshouldgoout was just opened — ref: " + ref + " — " + when };
+        try{ fetch(PING_URL, {method:"POST", headers:{"Content-Type":"application/json"},
+              body: JSON.stringify(payload), keepalive:true, mode:"no-cors"}); }catch(e){}
+      }
+      function arm(){ if(document.visibilityState === "visible") setTimeout(fire, 5000); }
+      arm();
+      document.addEventListener("visibilitychange", arm);
+    }catch(e){}
+  })();
 
   const DAY_MS = 24*60*60*1000;
   const start  = new Date(CONFIG.metDate).getTime();
