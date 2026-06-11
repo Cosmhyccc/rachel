@@ -251,8 +251,11 @@
     <div class="foot"> coded this thing by hand | no AI slop vibecode | let's go  </div>
   </div>
 
-  <!-- Vercel Web Analytics: enable it in your Vercel dashboard
-       (Project → Analytics → Enable). This line makes it work. -->
+  <!-- Vercel Web Analytics (official HTML snippet). The window.va queue
+       stub MUST come before the script, or the first pageview never fires. -->
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
   <script defer src="/_vercel/insights/script.js"></script>
 
 <script>
@@ -266,7 +269,7 @@
   const CONFIG = {
     metDate: "2026-06-07T00:00:00",
     totalPetals: 30,
-    sheReplied: false
+    sheReplied: true
   };
 
   const forceReplied = location.hash.toLowerCase() === "#shereplied";
@@ -383,13 +386,13 @@
 
   function render(){
     if(replied){
-      statusAns.textContent = "YES ♥";
+      statusAns.textContent = "YES";
       statusLine.classList.add("replied");
       dayBig.textContent = "♥";
       petalLine.textContent = "the rose lives";
       timerBlock.style.display = "none";
       replyNote.style.display = "block";
-      replyNote.textContent = "she replied. every petal grew back. see you at dolores. 🌹";
+      replyNote.textContent = "(Timer automatically stopped, Rachel responded as per server logs)";
       stage.classList.remove("dead");
       petals.forEach(({el,lbl,base})=>{
         el.classList.remove("fallen");
